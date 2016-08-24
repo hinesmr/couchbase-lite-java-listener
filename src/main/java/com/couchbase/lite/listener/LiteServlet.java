@@ -53,6 +53,18 @@ public class LiteServlet extends HttpServlet {
     public void service(HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
+       // Handle OPTIONS request in order to respond to CORS
+       response.setHeader("Access-Control-Allow-Origin", "http://localhost:10000");
+       response.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+       response.setHeader("Access-Control-Allow-Headers", "content-type, accept, authorization");
+       response.setHeader("Access-Control-Allow-Credentials", "true");
+
+       if("OPTIONS".equals(request.getMethod())){
+         Log.v(Log.TAG_LISTENER, "Handle OPTIONS request in order to respond to CORS");
+         response.setStatus(200);
+         return;
+       }
+
         Credentials requestCredentials = credentialsWithBasicAuthentication(request);
 
         if (allowedCredentials != null && !allowedCredentials.empty()) {
